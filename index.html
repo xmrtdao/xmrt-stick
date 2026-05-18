@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XMRT Stick — Mobile Monero, Plugged Into Your TV</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #06060a;
+      --fg: #e8e8f0;
+      --accent: #ff6b35;
+      --accent2: #00d4ff;
+      --card: #0f0f18;
+      --border: #1a1a2e;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Rajdhani', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+    }
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(255,107,53,0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(0,212,255,0.06) 0%, transparent 50%),
+        var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: -50%;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255,107,53,0.03) 2px,
+        rgba(255,107,53,0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero > * { position: relative; z-index: 1; }
+    .badge {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid rgba(255,107,53,0.3);
+      padding: 0.35rem 1rem;
+      border-radius: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    h1 {
+      font-family: 'Orbitron', monospace;
+      font-size: clamp(2.2rem, 6vw, 5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      font-size: clamp(1rem, 2vw, 1.4rem);
+      max-width: 600px;
+      color: #8a8aa0;
+      font-weight: 300;
+      margin-bottom: 2.5rem;
+    }
+    .cta-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .cta {
+      font-family: 'Orbitron', monospace;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 1rem 2.5rem;
+      border-radius: 0.4rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .cta-primary {
+      background: var(--accent);
+      color: #000;
+      border: none;
+    }
+    .cta-primary:hover { background: #ff8555; transform: translateY(-2px); }
+    .cta-secondary {
+      background: transparent;
+      color: var(--fg);
+      border: 1px solid var(--border);
+    }
+    .cta-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    .features {
+      padding: 5rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .section-title {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.6rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      color: var(--accent2);
+      text-transform: uppercase;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 0.6rem;
+      padding: 2rem;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,107,53,0.3);
+    }
+    .card h3 {
+      font-family: 'Orbitron', monospace;
+      font-size: 1rem;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .card p { color: #7a7a90; font-size: 0.95rem; }
+
+    .specs {
+      padding: 4rem 2rem;
+      background: var(--card);
+      border-top: 1px solid var(--border);
+    }
+    .specs-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .specs h2 {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.4rem;
+      color: var(--accent);
+      text-align: center;
+      margin-bottom: 2.5rem;
+      text-transform: uppercase;
+    }
+    .spec-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.95rem;
+    }
+    .spec-row:last-child { border-bottom: none; }
+    .spec-label { color: #6a6a80; font-weight: 500; }
+    .spec-value { color: var(--fg); font-family: 'Orbitron', monospace; }
+
+    .device-family {
+      padding: 5rem 2rem;
+      text-align: center;
+    }
+    .device-family h2 {
+      font-family: 'Orbitron', monospace;
+      font-size: 1.4rem;
+      color: var(--accent2);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .device-family p { max-width: 600px; margin: 0 auto 2rem; color: #7a7a90; }
+    .family-grid {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+    .family-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1.5rem 2rem;
+      min-width: 180px;
+      font-family: 'Orbitron', monospace;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--fg);
+    }
+    .family-item span { display: block; font-family: 'Rajdhani', sans-serif; font-size: 0.8rem; text-transform: none; color: #6a6a80; margin-top: 0.3rem; }
+
+    footer {
+      padding: 2.5rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: #555;
+    }
+    footer a { color: var(--accent); text-decoration: none; }
+
+    @media (max-width: 480px) {
+      .cta-row { flex-direction: column; width: 100%; }
+      .cta { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="badge">XMRT Hardware Family</div>
+    <h1>XMRT Stick</h1>
+    <div class="subtitle">
+      Plug-in privacy. A Fire-Stick-style device that turns any TV into a Monero-mining,
+      meshnet-ready, AI-agent-powered node. Built by XMRT DAO.
+    </div>
+    <div class="cta-row">
+      <a href="#features" class="cta cta-primary">Explore Features</a>
+      <a href="https://github.com/xmrtdao/xmrt-stick" class="cta cta-secondary">View on GitHub</a>
+    </div>
+  </section>
+
+  <section class="features" id="features">
+    <h2 class="section-title">What It Does</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>Hermes Agent Onboard</h3>
+        <p>Built-in MobileMonero fleet agent runs locally on the Stick. Control your mesh, mine, and chat with the DAO — no external laptop required.</p>
+      </div>
+      <div class="card">
+        <h3>XMRig Mining</h3>
+        <p>Silent, efficient Monero mining while your TV is idle. Configurable pools and automatic fleet orchestration.</p>
+      </div>
+      <div class="card">
+        <h3>LoRa Meshnet</h3>
+        <p>Off-grid communication via LoRa. Join the XMRT mesh, relay messages, and stay connected even without internet.</p>
+      </div>
+      <div class="card">
+        <h3>WiFi + USB/HDMI</h3>
+        <p>Plug directly into any HDMI port. USB power, onboard WiFi, and optional Ethernet for maximum flexibility.</p>
+      </div>
+      <div class="card">
+        <h3>Open Source</h3>
+        <p>Firmware, hardware schematics, and agent config are fully open. Flash your own image or run ours.</p>
+      </div>
+      <div class="card">
+        <h3>Fleet Dashboard</h3>
+        <p>See your Stick's status on <a href="https://relay.mobilemonero.com">relay.mobilemonero.com</a> alongside the rest of your XMRT fleet.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="specs">
+    <div class="specs-inner">
+      <h2>Technical Specs</h2>
+      <div class="spec-row"><span class="spec-label">SoC</span><span class="spec-value">ARM Cortex-A78 (6nm)</span></div>
+      <div class="spec-row"><span class="spec-label">RAM</span><span class="spec-value">4 GB LPDDR5</span></div>
+      <div class="spec-row"><span class="spec-label">Storage</span><span class="spec-value">64 GB eMMC + MicroSD</span></div>
+      <div class="spec-row"><span class="spec-label">Connectivity</span><span class="spec-value">WiFi 6, Bluetooth 5.3, LoRa 868/915 MHz</span></div>
+      <div class="spec-row"><span class="spec-label">Ports</span><span class="spec-value">HDMI 2.1, USB-C (power + data), USB-A 3.0</span></div>
+      <div class="spec-row"><span class="spec-label">Power</span><span class="spec-value">5V/2A USB-C</span></div>
+      <div class="spec-row"><span class="spec-label">Software</span><span class="spec-value">Linux (Debian-based), Hermes Agent, XMRig, libp2p Mesh</span></div>
+      <div class="spec-row"><span class="spec-label">Dimensions</span><span class="spec-value">85 x 30 x 12 mm</span></div>
+      <div class="spec-row"><span class="spec-label">Weight</span><span class="spec-value">42 g</span></div>
+      <div class="spec-row"><span class="spec-label">Expected MSRP</span><span class="spec-value">$89 USD</span></div>
+    </div>
+  </section>
+
+  <section class="device-family">
+    <h2>The XMRT Family</h2>
+    <p>XMRT Stick joins the lineup alongside our existing hardware. Mix and match to build your personal privacy stack.</p>
+    <div class="family-grid">
+      <div class="family-item">XMRT Charger<span>Portable battery + mining node</span></div>
+      <div class="family-item" style="border-color:var(--accent);">XMRT Stick<span>TV plug-in agent + miner</span></div>
+      <div class="family-item">XMRT Glasses<span>AI HUD + mesh relay</span></div>
+    </div>
+  </section>
+
+  <footer>
+    Built by <a href="https://github.com/xmrtdao">XMRT DAO</a> &middot;
+    Part of the <a href="https://github.com/xmrtdao/mobilemonero">MobileMonero</a> ecosystem &middot;
+    <a href="https://relay.mobilemonero.com">Fleet Dashboard</a>
+  </footer>
+
+</body>
+</html>
