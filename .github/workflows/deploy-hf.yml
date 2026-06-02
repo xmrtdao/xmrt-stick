@@ -1,0 +1,37 @@
+name: Deploy to Hugging Face Space
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Install git-lfs
+        run: git lfs install
+
+      - name: Clone HF Space
+        run: |
+          git clone https://huggingface.co/spaces/XMRTDAO/xmrt-stick hf-space
+          cd hf-space
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Sync files
+        run: |
+          rsync -av --delete ./ hf-space/
+          cd hf-space
+          git add .
+          git commit -m "Deploy from GitHub: ${{ github.sha }}" || echo "No changes"
+
+      - name: Push to HF Space
+        run: |
+          cd hf-space
+          git push https://${{ secrets.HF_TOKEN }}@huggingface.co/spaces/XMRTDAO/xmrt-stick main
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}

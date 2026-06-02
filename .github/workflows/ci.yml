@@ -1,0 +1,36 @@
+name: XMRT Stick CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate HTML
+        run: |
+          if [ -f index.html ]; then
+            echo "✓ index.html exists"
+          else
+            echo "✗ index.html missing"
+            exit 1
+          fi
+
+      - name: Check README
+        run: test -f README.md && echo "README OK"
+
+      - name: Validate LICENSE
+        run: test -f LICENSE && echo "LICENSE OK"
+
+      - name: Check for broken links
+        run: |
+          if grep -q 'href="#"' index.html; then
+            echo "⚠ Found placeholder links (#)"
+          else
+            echo "✓ No placeholder links"
+          fi
